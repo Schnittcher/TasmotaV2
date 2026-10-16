@@ -1,9 +1,10 @@
 {
     "id": "{E89467A8-281F-4B39-90E8-2803D9F03711}",
-    "name": "TasmotaV2",
+    "name": "TasmotaDeviceV2",
     "type": 3,
     "vendor": "Tasmota",
     "aliases": [
+        "Tasmota Device V2",
         "Tasmota V2",
         "Tasmota Gerät"
     ],

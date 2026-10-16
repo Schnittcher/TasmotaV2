@@ -10,7 +10,7 @@ require_once __DIR__ . '/../libs/ResponseMatcher.php';
 require_once __DIR__ . '/../libs/CommandTable.php';
 require_once __DIR__ . '/../libs/MqttTransport.php';
 
-class TasmotaV2 extends IPSModuleStrict
+class TasmotaDeviceV2 extends IPSModuleStrict
 {
     use TasmotaV2MqttTransport;
 

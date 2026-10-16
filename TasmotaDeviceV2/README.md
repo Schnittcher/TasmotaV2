@@ -1,4 +1,4 @@
-# Tasmota V2
+# Tasmota Device V2
 Bindet ein Tasmota-Gerät über MQTT ein. Die Instanz liest die Discovery-Nachricht des Geräts (`tasmota/discovery/<MAC>/config`) und legt daraus Relais, Licht, Rollläden, Taster und Schalter an. Sensoren und Energiewerte entstehen automatisch aus der Telemetrie. Normalerweise wird die Instanz über den Tasmota Konfigurator V2 angelegt.
 
 Voraussetzung am Gerät: MQTT ist eingerichtet und die Discovery ist aktiv (`SetOption19 0`, Standard). Weitere Einstellungen am Gerät sind nicht nötig. Nur wenn Taster oder Schalter am Gerät in IP-Symcon als Auslöser dienen sollen, gibt es dafür zwei optionale Einstellungen (siehe [2.4](#24-taster-und-schalter)).

@@ -17,7 +17,7 @@
 | Bereich | Datei oder Verzeichnis | Bedeutung |
 | --- | --- | --- |
 | Bibliothek | `library.json` | Eigene Bibliothek, Kompatibilität ab 8.1 |
-| Gerät | `TasmotaV2/module.php` | Empfang, Variablenpflege, Befehle |
+| Gerät | `TasmotaDeviceV2/module.php` | Empfang, Variablenpflege, Befehle |
 | Konfigurator | `TasmotaConfiguratorV2/module.php` | Geräteliste aus der Discovery |
 | Parser | `libs/MessageParser.php` | Nachricht (stat/tele) zu Variablendatensätzen, reine PHP-Logik |
 | Topics | `libs/TopicMapper.php` | FullTopic-Muster zu Topics und Empfangsfilter |

@@ -27,7 +27,7 @@ Bindet Geräte mit Tasmota-Firmware über MQTT ein. Das Gerät beschreibt sich �
 ## 2. Funktionsumfang
 * Relais, Licht (Dimmer, Farbe, Farbtemperatur, Weiß), Rollläden, Taster und Schalter
 * Sensoren und Energiewerte, auch für Sensoren ohne eigene Unterstützung
-* Spezialhardware, die das Modul an der Selbstauskunft des Geräts erkennt, erweiterbar über den [Funktionskatalog](libs/data/features.json) (Beschreibung und Voraussetzungen in der [README des Moduls](TasmotaV2/README.md#27-spezialfunktionen-funktionskatalog)):
+* Spezialhardware, die das Modul an der Selbstauskunft des Geräts erkennt, erweiterbar über den [Funktionskatalog](libs/data/features.json) (Beschreibung und Voraussetzungen in der [README des Moduls](TasmotaDeviceV2/README.md#27-spezialfunktionen-funktionskatalog)):
   * Fingerabdrucksensor AS608 mit Namen zu den IDs, Anlernen und Löschen
   * Lüfter Sonoff iFan02 und iFan03 mit Lüfterstufen
   * LED-Streifen WS2812 mit Pixelanzahl, Überblendung, Geschwindigkeit und Lichtprogrammen
@@ -41,7 +41,7 @@ Die einzelnen Funktionen stehen bei den Instanzen unter "Enthaltene Module" und 
 
 ## 3. Enthaltene Module
 
-* [Tasmota V2](TasmotaV2/README.md)
+* [Tasmota Device V2](TasmotaDeviceV2/README.md)
   * Bindet ein Tasmota-Gerät ein und legt Variablen für Relais, Licht, Rollläden, Taster, Schalter, Sensoren und Energie an.
   * Erkennt Spezialhardware an der GPIO-Belegung und legt deren Variablen und Befehle an (Funktionskatalog).
   * Befehle für Skripte: beliebiger Tasmota-Befehl, Zustand abfragen, Discovery anfordern.
