@@ -5,3 +5,4 @@ docs/adr/
 vendor/
 .DS_Store
 .idea/
+AGENTS.md
