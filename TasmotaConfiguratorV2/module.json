@@ -1,0 +1,19 @@
+{
+    "id": "{D7221291-D6EB-4050-80E0-A11AFB059553}",
+    "name": "TasmotaConfiguratorV2",
+    "type": 4,
+    "vendor": "Tasmota",
+    "aliases": [
+        "Tasmota Configurator V2",
+        "Tasmota Konfigurator"
+    ],
+    "parentRequirements": [
+        "{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}"
+    ],
+    "childRequirements": [],
+    "implemented": [
+        "{7F7632D9-FA40-4F38-8DEA-C83CD4325A32}"
+    ],
+    "prefix": "TASV2C",
+    "url": "https://github.com/Schnittcher/TasmotaV2"
+}

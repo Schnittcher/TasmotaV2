@@ -1,0 +1,238 @@
+{
+    "meta": [
+        "Time",
+        "TempUnit",
+        "PressureUnit",
+        "SpeedUnit"
+    ],
+    "sensor": {
+        "Temperature": {
+            "caption": "Temperature",
+            "unit": "@temp",
+            "digits": 1
+        },
+        "DewPoint": {
+            "caption": "Dew point",
+            "unit": "@temp",
+            "digits": 1
+        },
+        "Humidity": {
+            "caption": "Humidity",
+            "unit": "%",
+            "digits": 1
+        },
+        "Moisture": {
+            "caption": "Moisture",
+            "unit": "%",
+            "digits": 0
+        },
+        "Pressure": {
+            "caption": "Pressure",
+            "unit": "@pressure",
+            "digits": 1
+        },
+        "SeaPressure": {
+            "caption": "Sea level pressure",
+            "unit": "@pressure",
+            "digits": 1
+        },
+        "Illuminance": {
+            "caption": "Illuminance",
+            "unit": "lx",
+            "digits": 0
+        },
+        "CarbonDioxide": {
+            "caption": "Carbon dioxide",
+            "unit": "ppm",
+            "digits": 0
+        },
+        "eCO2": {
+            "caption": "eCO2",
+            "unit": "ppm",
+            "digits": 0
+        },
+        "TVOC": {
+            "caption": "TVOC",
+            "unit": "ppb",
+            "digits": 0
+        },
+        "PM1": {
+            "caption": "PM1",
+            "unit": "µg/m³",
+            "digits": 0
+        },
+        "PM2.5": {
+            "caption": "PM2.5",
+            "unit": "µg/m³",
+            "digits": 0
+        },
+        "PM10": {
+            "caption": "PM10",
+            "unit": "µg/m³",
+            "digits": 0
+        },
+        "Distance": {
+            "caption": "Distance",
+            "unit": "cm",
+            "digits": 0
+        },
+        "Speed": {
+            "caption": "Speed",
+            "unit": "@speed",
+            "digits": 1
+        },
+        "Gas": {
+            "caption": "Gas",
+            "unit": "kΩ",
+            "digits": 2
+        },
+        "Altitude": {
+            "caption": "Altitude",
+            "unit": "m",
+            "digits": 0
+        },
+        "Voltage": {
+            "caption": "Voltage",
+            "unit": "V",
+            "digits": 1
+        },
+        "Current": {
+            "caption": "Current",
+            "unit": "A",
+            "digits": 3
+        },
+        "Power": {
+            "caption": "Power",
+            "unit": "W",
+            "digits": 1
+        },
+        "ApparentPower": {
+            "caption": "Apparent power",
+            "unit": "VA",
+            "digits": 1
+        },
+        "ReactivePower": {
+            "caption": "Reactive power",
+            "unit": "VAr",
+            "digits": 1
+        },
+        "Frequency": {
+            "caption": "Frequency",
+            "unit": "Hz",
+            "digits": 1
+        },
+        "Factor": {
+            "caption": "Power factor",
+            "unit": "",
+            "digits": 2
+        }
+    },
+    "energy": {
+        "Total": {
+            "caption": "Total",
+            "unit": "kWh",
+            "digits": 3
+        },
+        "Yesterday": {
+            "caption": "Yesterday",
+            "unit": "kWh",
+            "digits": 3
+        },
+        "Today": {
+            "caption": "Today",
+            "unit": "kWh",
+            "digits": 3
+        },
+        "Period": {
+            "caption": "Period",
+            "unit": "Wh",
+            "digits": 0
+        },
+        "Power": {
+            "caption": "Power",
+            "unit": "W",
+            "digits": 1
+        },
+        "ApparentPower": {
+            "caption": "Apparent power",
+            "unit": "VA",
+            "digits": 1
+        },
+        "ReactivePower": {
+            "caption": "Reactive power",
+            "unit": "VAr",
+            "digits": 1
+        },
+        "Factor": {
+            "caption": "Power factor",
+            "unit": "",
+            "digits": 2
+        },
+        "Voltage": {
+            "caption": "Voltage",
+            "unit": "V",
+            "digits": 1
+        },
+        "Current": {
+            "caption": "Current",
+            "unit": "A",
+            "digits": 3
+        },
+        "Frequency": {
+            "caption": "Frequency",
+            "unit": "Hz",
+            "digits": 1
+        },
+        "ExportActive": {
+            "caption": "Export active energy",
+            "unit": "kWh",
+            "digits": 3
+        },
+        "ImportActive": {
+            "caption": "Import active energy",
+            "unit": "kWh",
+            "digits": 3
+        },
+        "ExportReactive": {
+            "caption": "Export reactive energy",
+            "unit": "kvarh",
+            "digits": 3
+        },
+        "ImportReactive": {
+            "caption": "Import reactive energy",
+            "unit": "kvarh",
+            "digits": 3
+        },
+        "TotalReactive": {
+            "caption": "Total reactive energy",
+            "unit": "kvarh",
+            "digits": 3
+        },
+        "PhaseAngle": {
+            "caption": "Phase angle",
+            "unit": "°",
+            "digits": 1
+        },
+        "TotalStartTime": {
+            "caption": "Total start time"
+        }
+    },
+    "unitSymbols": {
+        "temp": {
+            "C": "°C",
+            "F": "°F"
+        },
+        "pressure": {
+            "hPa": "hPa",
+            "mmHg": "mmHg",
+            "inHg": "inHg"
+        },
+        "speed": {
+            "m/s": "m/s",
+            "km/h": "km/h",
+            "kn": "kn",
+            "mph": "mph",
+            "ft/s": "ft/s"
+        }
+    }
+}

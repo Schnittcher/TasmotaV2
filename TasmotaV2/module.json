@@ -1,0 +1,19 @@
+{
+    "id": "{E89467A8-281F-4B39-90E8-2803D9F03711}",
+    "name": "TasmotaV2",
+    "type": 3,
+    "vendor": "Tasmota",
+    "aliases": [
+        "Tasmota V2",
+        "Tasmota Gerät"
+    ],
+    "parentRequirements": [
+        "{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}"
+    ],
+    "childRequirements": [],
+    "implemented": [
+        "{7F7632D9-FA40-4F38-8DEA-C83CD4325A32}"
+    ],
+    "prefix": "TASV2",
+    "url": "https://github.com/Schnittcher/TasmotaV2"
+}

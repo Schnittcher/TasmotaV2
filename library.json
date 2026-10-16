@@ -1,0 +1,12 @@
+{
+    "id": "{5770D759-9357-41C7-8FC4-A5C3BAE864D5}",
+    "name": "Tasmota V2",
+    "author": "Kai Schnittcher",
+    "url": "https://github.com/Schnittcher/TasmotaV2",
+    "compatibility": {
+        "version": "8.1"
+    },
+    "version": "1.0",
+    "build": 0,
+    "date": 0
+}

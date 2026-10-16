@@ -1,0 +1,16 @@
+{
+    "translations": {
+        "de": {
+            "Discovery prefix": "Discovery-Präfix",
+            "Group topic": "Group-Topic",
+            "Devices": "Geräte",
+            "Topic": "Topic",
+            "Name": "Name",
+            "IP": "IP",
+            "Model": "Modell",
+            "Firmware": "Firmware",
+            "Search devices": "Geräte suchen",
+            "Spenden / Schenkung": "Spenden / Schenkung"
+        }
+    }
+}

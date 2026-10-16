@@ -1,0 +1,565 @@
+{
+    "fingerprint": {
+        "caption": "Fingerprint sensor (AS608)",
+        "detect": {
+            "gpio": [
+                "AS608 Rx",
+                "AS608 Tx"
+            ]
+        },
+        "init": [
+            {
+                "command": "FpCount",
+                "payload": ""
+            }
+        ],
+        "variables": {
+            "FingerprintId": {
+                "caption": "Last fingerprint ID",
+                "type": "integer",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 0
+                }
+            },
+            "FingerprintName": {
+                "caption": "Last fingerprint name",
+                "type": "string",
+                "presentation": {
+                    "kind": "text"
+                }
+            },
+            "FingerprintConfidence": {
+                "caption": "Fingerprint confidence",
+                "type": "integer",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 0
+                }
+            },
+            "FingerprintCount": {
+                "caption": "Stored fingerprints",
+                "type": "integer",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 0
+                }
+            },
+            "FingerprintStatus": {
+                "caption": "Fingerprint status",
+                "type": "string",
+                "presentation": {
+                    "kind": "text"
+                }
+            },
+            "FingerprintEnroll": {
+                "caption": "Enroll fingerprint (ID)",
+                "type": "integer",
+                "presentation": {
+                    "kind": "input"
+                },
+                "action": {
+                    "command": "FpEnroll",
+                    "payload": "{value}",
+                    "min": 0,
+                    "max": 128
+                }
+            },
+            "FingerprintDelete": {
+                "caption": "Delete fingerprint (ID)",
+                "type": "integer",
+                "presentation": {
+                    "kind": "input"
+                },
+                "action": {
+                    "command": "FpDelete",
+                    "payload": "{value}",
+                    "min": 1,
+                    "max": 128
+                }
+            }
+        },
+        "results": [
+            {
+                "path": "FPrint",
+                "variable": "FingerprintStatus",
+                "scalarOnly": true
+            },
+            {
+                "path": "FPrint.Id",
+                "variable": "FingerprintId"
+            },
+            {
+                "path": "FPrint.Confidence",
+                "variable": "FingerprintConfidence"
+            },
+            {
+                "path": "FpCount",
+                "variable": "FingerprintCount"
+            },
+            {
+                "path": "FpEnroll",
+                "variable": "FingerprintStatus"
+            },
+            {
+                "path": "FpDelete",
+                "variable": "FingerprintStatus"
+            }
+        ],
+        "names": {
+            "property": "FingerprintNames",
+            "idVariable": "FingerprintId",
+            "nameVariable": "FingerprintName"
+        }
+    },
+    "ifan": {
+        "caption": "Fan (Sonoff iFan02/iFan03)",
+        "detect": {
+            "discovery": [
+                "if"
+            ]
+        },
+        "init": [
+            {
+                "command": "FanSpeed",
+                "payload": ""
+            }
+        ],
+        "variables": {
+            "FanSpeed": {
+                "caption": "Fan speed",
+                "type": "integer",
+                "presentation": {
+                    "kind": "enumeration",
+                    "options": [
+                        [
+                            0,
+                            "Fan off"
+                        ],
+                        [
+                            1,
+                            "Fan speed 1"
+                        ],
+                        [
+                            2,
+                            "Fan speed 2"
+                        ],
+                        [
+                            3,
+                            "Fan speed 3"
+                        ]
+                    ]
+                },
+                "action": {
+                    "command": "FanSpeed",
+                    "payload": "{value}",
+                    "min": 0,
+                    "max": 3
+                }
+            }
+        },
+        "results": [
+            {
+                "path": "FanSpeed",
+                "variable": "FanSpeed"
+            }
+        ]
+    },
+    "poweronstate": {
+        "caption": "Power on state",
+        "detect": {
+            "always": true
+        },
+        "init": [
+            {
+                "command": "PowerOnState",
+                "payload": ""
+            }
+        ],
+        "variables": {
+            "PowerOnState": {
+                "caption": "Power on state",
+                "type": "integer",
+                "presentation": {
+                    "kind": "enumeration",
+                    "options": [
+                        [
+                            0,
+                            "Stay off"
+                        ],
+                        [
+                            1,
+                            "Switch on"
+                        ],
+                        [
+                            2,
+                            "Toggle last state"
+                        ],
+                        [
+                            3,
+                            "Restore last state"
+                        ],
+                        [
+                            4,
+                            "Switch on and lock relays"
+                        ],
+                        [
+                            5,
+                            "Switch on after pulse time"
+                        ]
+                    ]
+                },
+                "action": {
+                    "command": "PowerOnState",
+                    "payload": "{value}",
+                    "min": 0,
+                    "max": 5
+                }
+            }
+        },
+        "results": [
+            {
+                "path": "PowerOnState",
+                "variable": "PowerOnState"
+            },
+            {
+                "path": "Status.PowerOnState",
+                "variable": "PowerOnState"
+            }
+        ]
+    },
+    "powerlimit": {
+        "caption": "Power limits (energy monitoring)",
+        "detect": {
+            "data": [
+                "ENERGY",
+                "StatusSNS.ENERGY"
+            ]
+        },
+        "init": [
+            {
+                "command": "MaxPower",
+                "payload": ""
+            },
+            {
+                "command": "MaxPowerHold",
+                "payload": ""
+            },
+            {
+                "command": "MaxPowerWindow",
+                "payload": ""
+            }
+        ],
+        "variables": {
+            "MaxPower": {
+                "caption": "Power limit",
+                "type": "integer",
+                "presentation": {
+                    "kind": "input",
+                    "suffix": " W"
+                },
+                "action": {
+                    "command": "MaxPower",
+                    "payload": "{value}",
+                    "min": 0,
+                    "max": 65535
+                }
+            },
+            "MaxPowerHold": {
+                "caption": "Power limit hold time",
+                "type": "integer",
+                "presentation": {
+                    "kind": "input",
+                    "suffix": " s"
+                },
+                "action": {
+                    "command": "MaxPowerHold",
+                    "payload": "{value}",
+                    "min": 0,
+                    "max": 65535
+                }
+            },
+            "MaxPowerWindow": {
+                "caption": "Power limit window",
+                "type": "integer",
+                "presentation": {
+                    "kind": "input",
+                    "suffix": " s"
+                },
+                "action": {
+                    "command": "MaxPowerWindow",
+                    "payload": "{value}",
+                    "min": 0,
+                    "max": 65535
+                }
+            }
+        },
+        "results": [
+            {
+                "path": "MaxPower",
+                "variable": "MaxPower"
+            },
+            {
+                "path": "MaxPowerHold",
+                "variable": "MaxPowerHold"
+            },
+            {
+                "path": "MaxPowerWindow",
+                "variable": "MaxPowerWindow"
+            },
+            {
+                "path": "StatusPTH.MaxPower",
+                "variable": "MaxPower"
+            },
+            {
+                "path": "StatusPTH.MaxPowerHold",
+                "variable": "MaxPowerHold"
+            },
+            {
+                "path": "StatusPTH.MaxPowerWindow",
+                "variable": "MaxPowerWindow"
+            }
+        ]
+    },
+    "irreceive": {
+        "caption": "IR receiver",
+        "detect": {
+            "gpio": [
+                "IRrecv"
+            ]
+        },
+        "variables": {
+            "IRProtocol": {
+                "caption": "IR protocol",
+                "type": "string",
+                "presentation": {
+                    "kind": "text"
+                }
+            },
+            "IRBits": {
+                "caption": "IR bits",
+                "type": "integer",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 0
+                }
+            },
+            "IRData": {
+                "caption": "IR data",
+                "type": "string",
+                "presentation": {
+                    "kind": "text"
+                }
+            },
+            "IRHash": {
+                "caption": "IR hash",
+                "type": "string",
+                "presentation": {
+                    "kind": "text"
+                }
+            }
+        },
+        "results": [
+            {
+                "path": "IrReceived.Protocol",
+                "variable": "IRProtocol"
+            },
+            {
+                "path": "IrReceived.Bits",
+                "variable": "IRBits"
+            },
+            {
+                "path": "IrReceived.Data",
+                "variable": "IRData"
+            },
+            {
+                "path": "IrReceived.Hash",
+                "variable": "IRHash"
+            }
+        ]
+    },
+    "ws2812": {
+        "caption": "LED strip (WS2812)",
+        "detect": {
+            "gpio": [
+                "WS2812"
+            ]
+        },
+        "init": [
+            {
+                "command": "Pixels",
+                "payload": ""
+            }
+        ],
+        "variables": {
+            "Pixels": {
+                "caption": "Pixels",
+                "type": "integer",
+                "presentation": {
+                    "kind": "input"
+                },
+                "action": {
+                    "command": "Pixels",
+                    "payload": "{value}",
+                    "min": 1,
+                    "max": 512
+                }
+            }
+        },
+        "results": [
+            {
+                "path": "Pixels",
+                "variable": "Pixels"
+            }
+        ]
+    },
+    "mcp230xx": {
+        "caption": "Port expander (MCP230xx)",
+        "detect": {
+            "data": [
+                "MCP230XX",
+                "MCP230XX_INT",
+                "MCP230_OUT",
+                "S29cmnd_D#"
+            ]
+        },
+        "variables": {
+            "MCP230XXIntervalMs": {
+                "caption": "MCP230XX time since last interrupt",
+                "type": "integer",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 0,
+                    "unit": "ms"
+                }
+            }
+        },
+        "results": [
+            {
+                "path": "MCP230XX_INT.MS",
+                "variable": "MCP230XXIntervalMs"
+            }
+        ],
+        "dynamic": [
+            {
+                "path": "MCP230XX.D#",
+                "ident": "MCP230XX_D{1}",
+                "caption": "MCP230XX pin D{1}",
+                "type": "boolean",
+                "presentation": {
+                    "kind": "status",
+                    "off": "Low",
+                    "on": "High"
+                }
+            },
+            {
+                "path": "MCP230XX_INT.D#",
+                "ident": "MCP230XX_D{1}",
+                "caption": "MCP230XX pin D{1}",
+                "type": "boolean",
+                "presentation": {
+                    "kind": "status",
+                    "off": "Low",
+                    "on": "High"
+                }
+            },
+            {
+                "path": "MCP230_OUT.OUT_D#",
+                "ident": "MCP230XX_Out{1}",
+                "caption": "MCP230XX output D{1}",
+                "type": "boolean",
+                "presentation": {
+                    "kind": "toggle"
+                },
+                "action": {
+                    "command": "Sensor29",
+                    "payload": "{1},{value}",
+                    "boolean": [
+                        "OFF",
+                        "ON"
+                    ]
+                }
+            },
+            {
+                "path": "S29cmnd_D#.STATE",
+                "ident": "MCP230XX_Out{1}",
+                "caption": "MCP230XX output D{1}",
+                "type": "boolean",
+                "presentation": {
+                    "kind": "toggle"
+                },
+                "action": {
+                    "command": "Sensor29",
+                    "payload": "{1},{value}",
+                    "boolean": [
+                        "OFF",
+                        "ON"
+                    ]
+                }
+            }
+        ]
+    },
+    "pcf8574": {
+        "caption": "Port expander (PCF8574)",
+        "detect": {
+            "data": [
+                "PCF8574-#",
+                "PCF8574-#_INP"
+            ]
+        },
+        "dynamic": [
+            {
+                "path": "PCF8574-#.D#",
+                "ident": "PCF8574_{1}_D{2}",
+                "caption": "PCF8574-{1} pin D{2}",
+                "type": "boolean",
+                "presentation": {
+                    "kind": "status",
+                    "off": "Low",
+                    "on": "High"
+                }
+            },
+            {
+                "path": "PCF8574-#_INP.D#",
+                "ident": "PCF8574_{1}_D{2}",
+                "caption": "PCF8574-{1} pin D{2}",
+                "type": "boolean",
+                "presentation": {
+                    "kind": "status",
+                    "off": "Low",
+                    "on": "High"
+                }
+            }
+        ]
+    },
+    "pca9685": {
+        "caption": "PWM driver (PCA9685)",
+        "detect": {
+            "data": [
+                "PCA9685"
+            ]
+        },
+        "dynamic": [
+            {
+                "path": "PCA9685",
+                "keyField": "PIN",
+                "valueField": "PWM",
+                "ident": "PCA9685_PWM{1}",
+                "caption": "PCA9685 PWM pin {1}",
+                "type": "integer",
+                "presentation": {
+                    "kind": "slider",
+                    "min": 0,
+                    "max": 4096,
+                    "step": 1
+                },
+                "action": {
+                    "command": "driver15",
+                    "payload": "pwm,{1},{value}",
+                    "min": 0,
+                    "max": 4096
+                }
+            }
+        ]
+    }
+}
