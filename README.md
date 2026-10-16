@@ -27,7 +27,13 @@ Bindet Geräte mit Tasmota-Firmware über MQTT ein. Das Gerät beschreibt sich �
 ## 2. Funktionsumfang
 * Relais, Licht (Dimmer, Farbe, Farbtemperatur, Weiß), Rollläden, Taster und Schalter
 * Sensoren und Energiewerte, auch für Sensoren ohne eigene Unterstützung
-* Spezialhardware wie der Fingerabdrucksensor AS608, erkannt an der GPIO-Belegung, erweiterbar über einen Katalog
+* Spezialhardware, die das Modul an der Selbstauskunft des Geräts erkennt, erweiterbar über den [Funktionskatalog](libs/data/features.json) (Beschreibung und Voraussetzungen in der [README des Moduls](TasmotaV2/README.md#27-spezialfunktionen-funktionskatalog)):
+  * Fingerabdrucksensor AS608 mit Namen zu den IDs, Anlernen und Löschen
+  * Lüfter Sonoff iFan02 und iFan03 mit Lüfterstufen
+  * LED-Streifen WS2812 mit Pixelanzahl, Überblendung, Geschwindigkeit und Lichtprogrammen
+  * IR-Empfänger mit Protokoll, Bits, Daten und Hash des zuletzt empfangenen Codes
+  * Geräte mit Energiemessung, mit den Leistungsgrenzen (MaxPower)
+  * Port-Erweiterungen MCP230xx und PCF8574 sowie PWM-Treiber PCA9685 (nur mit einer Firmware, die die Treiber enthält)
 * Erreichbarkeit des Geräts und WLAN-Qualität
 * Konfigurator, der Geräte über MQTT findet
 
@@ -47,6 +53,8 @@ Die Installation erfolgt über den IP-Symcon Module Store.
 
 ## 5. Konfiguration in IP-Symcon
 Zuerst den MQTT-Server oder den MQTT-Client einrichten. Danach den Tasmota Konfigurator V2 anlegen, ihn mit dem MQTT-Parent verbinden und mit "Geräte suchen" die Discovery der Geräte anfordern. Aus der Liste lassen sich Instanzen anlegen. Alternativ legt man eine Tasmota-V2-Instanz von Hand an und trägt das Topic ein.
+
+Taster und Schalter am Gerät brauchen keine Einstellung. Nur wenn sie in IP-Symcon als Auslöser dienen sollen, schaltet man am Gerät `SetOption73` (Taster) und `SetOption114` (Schalter) ein. Dann schalten sie das Relais nicht mehr selbst, Einzelheiten stehen in der README des Moduls.
 
 Die Module laufen unabhängig von der Bibliothek `IPS-Tasmota` und können parallel zu ihr betrieben werden.
 

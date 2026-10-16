@@ -1,7 +1,7 @@
 # Tasmota V2
 Bindet ein Tasmota-Gerät über MQTT ein. Die Instanz liest die Discovery-Nachricht des Geräts (`tasmota/discovery/<MAC>/config`) und legt daraus Relais, Licht, Rollläden, Taster und Schalter an. Sensoren und Energiewerte entstehen automatisch aus der Telemetrie. Normalerweise wird die Instanz über den Tasmota Konfigurator V2 angelegt.
 
-Voraussetzung am Gerät: MQTT ist eingerichtet, die Discovery ist aktiv (`SetOption19 0`, Standard). Taster erscheinen erst mit `SetOption73 1`, Schalter mit `SetOption114 1`.
+Voraussetzung am Gerät: MQTT ist eingerichtet und die Discovery ist aktiv (`SetOption19 0`, Standard). Weitere Einstellungen am Gerät sind nicht nötig. Nur wenn Taster oder Schalter am Gerät in IP-Symcon als Auslöser dienen sollen, gibt es dafür zwei optionale Einstellungen (siehe [2.4](#24-taster-und-schalter)).
 
 ## Inhaltsverzeichnis
 - [Tasmota V2](#tasmota-v2)
@@ -71,6 +71,17 @@ Rollladen n Steuerung | `Shutter<n>Control` | Ganzzahl | Auf, Stopp, Zu. Steht i
 
 ### 2.4 Taster und Schalter
 
+**Optional, nur wenn man es braucht.** Ein Taster oder Schalter am Gerät schaltet normalerweise direkt das Relais, und das Modul zeigt nur den neuen Zustand (`Power<n>`). Das genügt für die meisten Geräte, es muss nichts eingestellt werden.
+
+Soll IP-Symcon dagegen auf Taster oder Schalter am Gerät reagieren, zum Beispiel mit einer Szene bei Doppelklick oder einem Befehl bei langem Drücken, gibt es am Gerät zwei Einstellungen:
+
+Einstellung am Gerät | Wirkung | Variable
+------------ | ------------ | ----------------
+`SetOption73 1` | Taster melden jede Aktion einzeln (`SINGLE`, `DOUBLE`, `TRIPLE`, `QUAD`, `PENTA`, `HOLD`, `CLEAR`) | `Button<n>`
+`SetOption114 1` | Schalter melden ihre Aktion nur über MQTT (`ON`, `OFF`, `TOGGLE`, `HOLD`) | `Switch<n>`
+
+Achtung: Mit diesen Einstellungen sind Taster oder Schalter vom Relais getrennt und schalten es nicht mehr selbst. Das Relais schaltet dann nur noch, wenn IP-Symcon (oder eine Regel im Gerät) darauf reagiert. Fällt IP-Symcon oder der MQTT-Broker aus, bleibt der Taster am Gerät wirkungslos. Ohne die Einstellungen legt das Modul keine Taster- und Schaltervariablen an.
+
 Variable | Ident | Typ | Beschreibung
 ------------ | ------------ | ------------ | ----------------
 Taster n | `Button<n>` | Text | Letzte Aktion: `SINGLE`, `DOUBLE`, `TRIPLE`, `QUAD`, `PENTA`, `HOLD`, `CLEAR`. Nur mit `SetOption73 1`.
@@ -98,17 +109,28 @@ WLAN | `System_WifiSSId`, `System_WifiBSSId`, `System_WifiMode`, `System_WifiCha
 ### 2.7 Spezialfunktionen (Funktionskatalog)
 Hardware, die die Discovery nicht beschreibt, erkennt die Instanz an der GPIO-Belegung des Geräts oder, beim Sonoff iFan, an einem Kennzeichen der Discovery (Befehl `Gpio`, wird beim Start und bei "Zustand abfragen" gesendet). Für jede erkannte Funktion legt sie Variablen an, wertet deren Ergebnisse aus und ordnet bedienbaren Variablen den Befehl zu. Der Katalog liegt in `libs/data/features.json`.
 
-Funktion | Kennung | Erkennung
------------- | ------------ | ----------------
-Zustand beim Einschalten | `poweronstate` | für jedes Gerät
-Fingerabdrucksensor AS608 | `fingerprint` | GPIO `AS608 Rx` oder `AS608 Tx`
-Lüfter Sonoff iFan02/iFan03 | `ifan` | Kennzeichen `if` in der Discovery
-IR-Empfänger | `irreceive` | GPIO `IRrecv`
-LED-Streifen WS2812 | `ws2812` | GPIO `WS2812`
-Port-Erweiterung MCP230xx | `mcp230xx` | Daten `MCP230XX`, `MCP230XX_INT`, `MCP230_OUT` oder `S29cmnd_D<n>`
-Port-Erweiterung PCF8574 | `pcf8574` | Daten `PCF8574-<n>` oder `PCF8574-<n>_INP`
-PWM-Treiber PCA9685 | `pca9685` | Daten `PCA9685`
-Leistungsgrenzen | `powerlimit` | Das Gerät liefert Energiewerte (`ENERGY`) in der Telemetrie oder in der Discovery-Nachricht `sensors`, wird dann dauerhaft gemerkt
+Unterstützte Spezialhardware:
+* Fingerabdrucksensor AS608
+* Lüfter Sonoff iFan02 und iFan03
+* LED-Streifen WS2812 (adressierbare LEDs)
+* IR-Empfänger
+* Geräte mit Energiemessung (Leistungsgrenzen)
+* Port-Erweiterungen MCP230xx und PCF8574
+* PWM-Treiber PCA9685
+
+Funktion | Kennung | Erkennung | Voraussetzung am Gerät
+------------ | ------------ | ---------------- | ----------------
+Zustand beim Einschalten | `poweronstate` | für jedes Gerät | keine
+Fingerabdrucksensor AS608 | `fingerprint` | GPIO `AS608 Rx` oder `AS608 Tx` | Firmware mit AS608-Treiber, GPIOs belegt
+Lüfter Sonoff iFan02/iFan03 | `ifan` | Kennzeichen `if` in der Discovery | Gerät mit dem iFan-Modul
+IR-Empfänger | `irreceive` | GPIO `IRrecv` | GPIO `IRrecv` ist belegt
+LED-Streifen WS2812 | `ws2812` | GPIO `WS2812` | GPIO `WS2812` ist belegt
+Port-Erweiterung MCP230xx | `mcp230xx` | Daten `MCP230XX`, `MCP230XX_INT`, `MCP230_OUT` oder `S29cmnd_D<n>` | Eigene Firmware mit `USE_MCP230xx`
+Port-Erweiterung PCF8574 | `pcf8574` | Daten `PCF8574-<n>` oder `PCF8574-<n>_INP` | Eigene Firmware mit `USE_PCF8574`, für die Pinwerte `USE_PCF8574_SENSOR`, für Ereignisse `USE_PCF8574_MQTTINPUT`
+PWM-Treiber PCA9685 | `pca9685` | Daten `PCA9685` | Eigene Firmware mit `USE_PCA9685`
+Leistungsgrenzen | `powerlimit` | Das Gerät liefert Energiewerte (`ENERGY`) in der Telemetrie oder in der Discovery-Nachricht `sensors`, wird dann dauerhaft gemerkt | Energiemessung am Gerät
+
+Die Treiber der Port-Erweiterungen und des PCA9685 sind laut Tasmota-Doku nicht in den vorkompilierten Firmwares enthalten.
 
 Variable | Ident | Typ | Beschreibung
 ------------ | ------------ | ------------ | ----------------
