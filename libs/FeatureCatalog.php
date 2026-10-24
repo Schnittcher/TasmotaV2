@@ -13,9 +13,9 @@ require_once __DIR__ . '/DiscoveryModel.php';
  * Neue Hardware braucht einen neuen Eintrag, keinen neuen Code.
  *
  * Eintrag: caption, detect.gpio[], detect.discovery[] (Kennzeichen der Discovery wie "if") oder detect.always (für jedes Gerät), detect.data[] (JSON-Pfade, die in einer empfangenen Nachricht vorkommen, zum Beispiel ENERGY), init[] {command, payload}, variables{ident: {caption, type, presentation, action}},
- * results[] {path, variable, scalarOnly}, dynamic[] (Variablen, die erst entstehen, wenn Daten da sind, zum Beispiel je Pin), names {property, idVariable, nameVariable}. type: boolean, integer, float, string. presentation.kind: text, number, input, slider,
- * toggle, color, enumeration (options: [[Wert, Beschriftung], ...]). action: {command, payload, min, max} mit dem Platzhalter {value}; min und max sind optional
- * und verwerfen Werte außerhalb des Bereichs.
+ * results[] {path, variable, scalarOnly, join (Liste mit diesem Trennzeichen zu Text zusammenfügen)}, dynamic[] (Variablen, die erst entstehen, wenn Daten da sind, zum Beispiel je Pin), names {property, idVariable, nameVariable}. type: boolean, integer, float, string. presentation.kind: text, number, input, slider,
+ * toggle, color, enumeration (options: [[Wert, Beschriftung], ...]). action: {command, payload, min, max, pattern} mit dem Platzhalter {value}; min und max sind optional
+ * und verwerfen Werte außerhalb des Bereichs, pattern (regulärer Ausdruck, geprüft ohne Leerzeichen) verwirft ungültigen Text.
  */
 final class TasmotaV2FeatureCatalog
 {
@@ -225,6 +225,10 @@ final class TasmotaV2FeatureCatalog
             foreach (($this->features[$id]['results'] ?? []) as $result) {
                 $ident = (string) $result['variable'];
                 $value = $this->lookup($data, (string) $result['path']);
+                if (is_array($value) && isset($result['join'])) {
+                    // Liste (zum Beispiel 9 Empfindlichkeiten) als ein Text
+                    $value = implode((string) $result['join'], array_map('strval', array_filter($value, 'is_scalar')));
+                }
                 if ($value === null || !isset($variables[$ident]) || (!empty($result['scalarOnly']) && is_array($value))) {
                     continue;
                 }
@@ -289,6 +293,13 @@ final class TasmotaV2FeatureCatalog
         foreach ($this->normalize($ids) as $id) {
             $action = $this->features[$id]['variables'][$ident]['action'] ?? null;
             if (is_array($action)) {
+                if (isset($action['pattern'])) {
+                    // Text in der erwarteten Form, zum Beispiel eine Liste von Zahlen; Leerzeichen werden entfernt
+                    $value = (string) preg_replace('/\s+/', '', (string) $value);
+                    if (preg_match((string) $action['pattern'], $value) !== 1) {
+                        return null;
+                    }
+                }
                 // Wertebereich der Aktion: schützt vor Werten mit Nebenwirkung (zum Beispiel FpDelete 0 leert die Datenbank)
                 if (is_numeric($value) && ((isset($action['min']) && $value < $action['min']) || (isset($action['max']) && $value > $action['max']))) {
                     return null;

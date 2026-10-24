@@ -410,6 +410,63 @@ final class FeatureCatalogTest extends TestCase
         $this->assertContains('Sensor_BME280_Temperature', $idents);
     }
 
+    public function testLd2410IsDetectedFromGpioAndFromItsTelemetry(): void
+    {
+        $old = TasmotaV2FeatureCatalog::componentsFromResult(json_decode('{"GPIO16":{"3552":"LD2410 Tx"},"GPIO17":{"3584":"LD2410 Rx"},"GPIO4":{"544":"Switch1"}}', true));
+        $new = TasmotaV2FeatureCatalog::componentsFromResult(json_decode('{"GPIO16":{"LD2410 Tx":3552},"GPIO17":{"LD2410 Rx":3584}}', true));
+        $this->assertSame(['ld2410'], $this->catalog()->detect($old));
+        $this->assertSame(['ld2410'], $this->catalog()->detect($new));
+        $this->assertSame(['ld2410'], $this->catalog()->detectFromData(['Time' => 'x', 'LD2410' => ['Distance' => [125.0, 0.0, 0.0], 'Energy' => [0, 100]]]));
+    }
+
+    public function testLd2410TelemetryFillsNamedVariables(): void
+    {
+        $values = $this->resultValues(['ld2410'], ['Time' => '2022-11-26T10:48:16', 'Switch1' => 'ON', 'LD2410' => ['Distance' => [125.5, 0.0, 99.0], 'Energy' => [13, 100]]]);
+        $this->assertEquals([
+            'LD2410MovingDistance' => 125.5, 'LD2410StaticDistance' => 0.0, 'LD2410DetectDistance' => 99.0,
+            'LD2410MovingEnergy'   => 13, 'LD2410StaticEnergy' => 100
+        ], $values);
+    }
+
+    public function testLd2410GetResultAndGateEnergies(): void
+    {
+        $payload = ['LD2410' => ['Moving energy' => [13, 12, 10, 9, 9, 8, 1, 4, 4], 'Static energy' => [0, 0, 100, 100, 45, 32, 147, 15, 5], 'Light' => 103, 'Out_pin' => 1]];
+        $values = $this->resultValues(['ld2410'], $payload);
+        $this->assertSame(103, $values['LD2410Light']);
+        $this->assertTrue($values['LD2410OutPin']);
+        $this->assertSame(13, $values['LD2410MovingGate0']);
+        $this->assertSame(4, $values['LD2410MovingGate8']);
+        $this->assertSame(147, $values['LD2410StaticGate6']);
+        $this->assertCount(2 + 18, $values);
+    }
+
+    public function testLd2410SettingsReplyBecomesDurationAndSensitivityLists(): void
+    {
+        $reply = ['LD2410' => ['Duration' => 5, 'Moving' => ['Gates' => 8, 'Sensitivity' => [50, 50, 40, 30, 20, 15, 15, 15, 15]], 'Static' => ['Gates' => 8, 'Sensitivity' => [0, 0, 40, 40, 30, 30, 20, 20, 20]]]];
+        $values = $this->resultValues(['ld2410'], $reply);
+        $this->assertSame(5, $values['LD2410Duration']);
+        $this->assertSame('50,50,40,30,20,15,15,15,15', $values['LD2410MovingSens']);
+        $this->assertSame('0,0,40,40,30,30,20,20,20', $values['LD2410StaticSens']);
+    }
+
+    public function testLd2410CommandsAreValidated(): void
+    {
+        $this->assertSame(['command' => 'LD2410Duration', 'payload' => '30'], $this->catalog()->command('LD2410Duration', 30, ['ld2410']));
+        $this->assertNull($this->catalog()->command('LD2410Duration', 0, ['ld2410']), '0 würde den Sensor auf Werkseinstellung setzen');
+        $this->assertNull($this->catalog()->command('LD2410Duration', 70000, ['ld2410']));
+        $this->assertSame('50,50,40,30,20,15,15,15,15', $this->catalog()->command('LD2410MovingSens', '50, 50, 40,30,20,15,15,15,15', ['ld2410'])['payload'], 'Leerzeichen werden entfernt');
+        $this->assertSame('100', $this->catalog()->command('LD2410StaticSens', '100', ['ld2410'])['payload']);
+        $this->assertSame('0,100', $this->catalog()->command('LD2410MovingSens', '0,100', ['ld2410'])['payload']);
+        foreach (['', 'abc', '101', '50,,40', '1,2,3,4,5,6,7,8,9,10', '50;40', '-5', '5.5'] as $invalid) {
+            $this->assertNull($this->catalog()->command('LD2410MovingSens', $invalid, ['ld2410']), 'ungültig: ' . $invalid);
+        }
+    }
+
+    public function testLd2410InitQueryIsHarmless(): void
+    {
+        $this->assertSame([['command' => 'LD2410MovingSens', 'payload' => '']], $this->catalog()->initCommands(['ld2410']));
+    }
+
     public function testCatalogFileIsConsistent(): void
     {
         $file = json_decode((string) file_get_contents(__DIR__ . '/../libs/data/features.json'), true);

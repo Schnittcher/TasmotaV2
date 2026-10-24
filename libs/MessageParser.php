@@ -368,7 +368,7 @@ final class TasmotaV2MessageParser
                 if (array_is_list($value)) {
                     foreach ($value as $index => $item) {
                         if (is_scalar($item)) {
-                            $records[] = $this->sensorValue([...$childPath, (string) ($index + 1)], $key, $item, $unitSymbols);
+                            $records[] = $this->sensorValue([...$childPath, (string) ($index + 1)], $key, $item, $unitSymbols, $index + 1);
                         }
                     }
                     continue;
@@ -388,13 +388,14 @@ final class TasmotaV2MessageParser
      * @param array<string,string> $unitSymbols
      * @return array<string,mixed>
      */
-    private function sensorValue(array $path, string $key, mixed $value, array $unitSymbols): array
+    private function sensorValue(array $path, string $key, mixed $value, array $unitSymbols, ?int $listIndex = null): array
     {
         $definition = $this->units['sensor'][$key] ?? null;
         $caption = ($this->translate)(is_array($definition) ? (string) $definition['caption'] : $key);
         // Der Sensorname steht vor dem Wert, verschachtelte Ebenen davor
-        $name = implode(' ', array_slice($path, 0, -1));
-        $fullCaption = trim($name . ' ' . $caption);
+        // Bei Listenwerten steht am Ende die laufende Nummer, davor der Schlüssel der Liste
+        $name = implode(' ', array_slice($path, 0, $listIndex === null ? -1 : -2));
+        $fullCaption = trim($name . ' ' . $caption . ($listIndex === null ? '' : ' ' . $listIndex));
         $ident = $this->ident('Sensor_' . implode('_', $path));
 
         if (is_bool($value)) {

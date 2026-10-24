@@ -153,7 +153,22 @@
             "Import reactive energy": "Importierte Blindenergie",
             "Total reactive energy": "Gesamte Blindenergie",
             "Phase angle": "Phasenwinkel",
-            "Total start time": "Zählerstart"
+            "Total start time": "Zählerstart",
+            "Presence radar (LD2410)": "Anwesenheitsradar (LD2410)",
+            "Moving target distance": "Entfernung bewegtes Ziel",
+            "Static target distance": "Entfernung ruhendes Ziel",
+            "Detection distance": "Erkennungsentfernung",
+            "Moving target energy": "Energie bewegtes Ziel",
+            "Static target energy": "Energie ruhendes Ziel",
+            "Light sensor": "Lichtsensor",
+            "Presence (OUT pin)": "Anwesenheit (OUT-Pin)",
+            "No presence": "Keine Anwesenheit",
+            "Presence": "Anwesenheit",
+            "No-one duration": "Haltezeit ohne Person",
+            "Moving sensitivity (gates 0 to 8)": "Empfindlichkeit bewegtes Ziel (Stufen 0 bis 8)",
+            "Static sensitivity (gates 0 to 8)": "Empfindlichkeit ruhendes Ziel (Stufen 0 bis 8)",
+            "Moving energy gate {1}": "Energie bewegt, Stufe {1}",
+            "Static energy gate {1}": "Energie ruhend, Stufe {1}"
         }
     }
 }

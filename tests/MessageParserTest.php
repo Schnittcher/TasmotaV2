@@ -196,6 +196,20 @@ final class MessageParserTest extends TestCase
         $this->assertArrayNotHasKey('System_GroupTopic', $this->values($this->parser()->parse('stat', 'STATUS0', $payload)));
     }
 
+    public function testListValuesOfASensorGetNumberedCaptions(): void
+    {
+        $records = $this->parser()->parse('tele', 'SENSOR', '{"LD2410":{"Distance":[125.0,0.0,5.5],"Energy":[0,100]},"BME280":{"Temperature":21}}');
+        $captions = [];
+        foreach ($records as $record) {
+            $captions[$record['ident']] = $record['caption'];
+        }
+        $this->assertSame('LD2410 Distance 1', $captions['Sensor_LD2410_Distance_1']);
+        $this->assertSame('LD2410 Distance 3', $captions['Sensor_LD2410_Distance_3']);
+        $this->assertSame('LD2410 Energy 2', $captions['Sensor_LD2410_Energy_2']);
+        $this->assertSame('BME280 Temperature', $captions['Sensor_BME280_Temperature'], 'einzelne Werte bleiben unverändert');
+        $this->assertCount(count(array_unique($captions)), $captions, 'jede Variable hat eine eigene Beschriftung');
+    }
+
     public function testButtonActionFromResult(): void
     {
         $this->assertSame(['Button1' => 'DOUBLE'], $this->values($this->parser()->parse('stat', 'RESULT', '{"Button1":{"Action":"DOUBLE"}}')));

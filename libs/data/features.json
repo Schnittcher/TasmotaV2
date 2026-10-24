@@ -561,5 +561,194 @@
                 }
             }
         ]
+    },
+    "ld2410": {
+        "caption": "Presence radar (LD2410)",
+        "detect": {
+            "gpio": [
+                "LD2410 Tx",
+                "LD2410 Rx"
+            ],
+            "data": [
+                "LD2410"
+            ]
+        },
+        "init": [
+            {
+                "command": "LD2410MovingSens",
+                "payload": ""
+            }
+        ],
+        "variables": {
+            "LD2410MovingDistance": {
+                "caption": "Moving target distance",
+                "type": "float",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 1,
+                    "unit": "cm"
+                }
+            },
+            "LD2410StaticDistance": {
+                "caption": "Static target distance",
+                "type": "float",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 1,
+                    "unit": "cm"
+                }
+            },
+            "LD2410DetectDistance": {
+                "caption": "Detection distance",
+                "type": "float",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 1,
+                    "unit": "cm"
+                }
+            },
+            "LD2410MovingEnergy": {
+                "caption": "Moving target energy",
+                "type": "integer",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 0,
+                    "unit": ""
+                }
+            },
+            "LD2410StaticEnergy": {
+                "caption": "Static target energy",
+                "type": "integer",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 0,
+                    "unit": ""
+                }
+            },
+            "LD2410Light": {
+                "caption": "Light sensor",
+                "type": "integer",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 0,
+                    "unit": ""
+                }
+            },
+            "LD2410OutPin": {
+                "caption": "Presence (OUT pin)",
+                "type": "boolean",
+                "presentation": {
+                    "kind": "status",
+                    "off": "No presence",
+                    "on": "Presence"
+                }
+            },
+            "LD2410Duration": {
+                "caption": "No-one duration",
+                "type": "integer",
+                "presentation": {
+                    "kind": "input",
+                    "suffix": " s"
+                },
+                "action": {
+                    "command": "LD2410Duration",
+                    "payload": "{value}",
+                    "min": 1,
+                    "max": 65535
+                }
+            },
+            "LD2410MovingSens": {
+                "caption": "Moving sensitivity (gates 0 to 8)",
+                "type": "string",
+                "presentation": {
+                    "kind": "input"
+                },
+                "action": {
+                    "command": "LD2410MovingSens",
+                    "payload": "{value}",
+                    "pattern": "/^(100|[1-9]?[0-9])(,(100|[1-9]?[0-9])){0,8}$/"
+                }
+            },
+            "LD2410StaticSens": {
+                "caption": "Static sensitivity (gates 0 to 8)",
+                "type": "string",
+                "presentation": {
+                    "kind": "input"
+                },
+                "action": {
+                    "command": "LD2410StaticSens",
+                    "payload": "{value}",
+                    "pattern": "/^(100|[1-9]?[0-9])(,(100|[1-9]?[0-9])){0,8}$/"
+                }
+            }
+        },
+        "results": [
+            {
+                "path": "LD2410.Distance.0",
+                "variable": "LD2410MovingDistance"
+            },
+            {
+                "path": "LD2410.Distance.1",
+                "variable": "LD2410StaticDistance"
+            },
+            {
+                "path": "LD2410.Distance.2",
+                "variable": "LD2410DetectDistance"
+            },
+            {
+                "path": "LD2410.Energy.0",
+                "variable": "LD2410MovingEnergy"
+            },
+            {
+                "path": "LD2410.Energy.1",
+                "variable": "LD2410StaticEnergy"
+            },
+            {
+                "path": "LD2410.Light",
+                "variable": "LD2410Light"
+            },
+            {
+                "path": "LD2410.Out_pin",
+                "variable": "LD2410OutPin"
+            },
+            {
+                "path": "LD2410.Duration",
+                "variable": "LD2410Duration"
+            },
+            {
+                "path": "LD2410.Moving.Sensitivity",
+                "variable": "LD2410MovingSens",
+                "join": ","
+            },
+            {
+                "path": "LD2410.Static.Sensitivity",
+                "variable": "LD2410StaticSens",
+                "join": ","
+            }
+        ],
+        "dynamic": [
+            {
+                "path": "LD2410.Moving energy.#",
+                "ident": "LD2410MovingGate{1}",
+                "caption": "Moving energy gate {1}",
+                "type": "integer",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 0,
+                    "unit": ""
+                }
+            },
+            {
+                "path": "LD2410.Static energy.#",
+                "ident": "LD2410StaticGate{1}",
+                "caption": "Static energy gate {1}",
+                "type": "integer",
+                "presentation": {
+                    "kind": "number",
+                    "digits": 0,
+                    "unit": ""
+                }
+            }
+        ]
     }
 }

@@ -114,6 +114,7 @@ Unterstützte Spezialhardware:
 * Lüfter Sonoff iFan02 und iFan03
 * LED-Streifen WS2812 (adressierbare LEDs)
 * IR-Empfänger
+* Anwesenheitsradar HLK-LD2410
 * Geräte mit Energiemessung (Leistungsgrenzen)
 * Port-Erweiterungen MCP230xx und PCF8574
 * PWM-Treiber PCA9685
@@ -125,15 +126,29 @@ Fingerabdrucksensor AS608 | `fingerprint` | GPIO `AS608 Rx` oder `AS608 Tx` | Fi
 Lüfter Sonoff iFan02/iFan03 | `ifan` | Kennzeichen `if` in der Discovery | Gerät mit dem iFan-Modul
 IR-Empfänger | `irreceive` | GPIO `IRrecv` | GPIO `IRrecv` ist belegt
 LED-Streifen WS2812 | `ws2812` | GPIO `WS2812` | GPIO `WS2812` ist belegt
+Anwesenheitsradar HLK-LD2410 | `ld2410` | GPIO `LD2410 Tx` oder `LD2410 Rx`, oder Daten `LD2410` | Eigene Firmware mit `USE_LD2410` (nicht in den vorkompilierten Firmwares), GPIOs `LD2410 Tx` und `LD2410 Rx` belegt
 Port-Erweiterung MCP230xx | `mcp230xx` | Daten `MCP230XX`, `MCP230XX_INT`, `MCP230_OUT` oder `S29cmnd_D<n>` | Eigene Firmware mit `USE_MCP230xx`
 Port-Erweiterung PCF8574 | `pcf8574` | Daten `PCF8574-<n>` oder `PCF8574-<n>_INP` | Eigene Firmware mit `USE_PCF8574`, für die Pinwerte `USE_PCF8574_SENSOR`, für Ereignisse `USE_PCF8574_MQTTINPUT`
 PWM-Treiber PCA9685 | `pca9685` | Daten `PCA9685` | Eigene Firmware mit `USE_PCA9685`
 Leistungsgrenzen | `powerlimit` | Das Gerät liefert Energiewerte (`ENERGY`) in der Telemetrie oder in der Discovery-Nachricht `sensors`, wird dann dauerhaft gemerkt | Energiemessung am Gerät
 
+Hinweise zum Anwesenheitsradar LD2410 (aus der Tasmota-Doku und dem Quelltext des Treibers):
+* Der Treiber ist nicht in den vorkompilierten Firmwares enthalten, er braucht eine eigene Firmware mit `USE_LD2410`. Gemeint ist der HLK-LD2410 (B und C), der LD2410S hat einen eigenen Treiber und wird nicht unterstützt.
+* Das Gerät veröffentlicht die Telemetrie laut Quelltext nur, solange die Bewegungsenergie nicht null ist. Ein ruhender Mensch erzeugt keine Telemetrie. Für eine zuverlässige Anwesenheit den OUT-Pin des Sensors an einen GPIO legen und dort als `Switch` konfigurieren, er erscheint dann als Schalter (`Switch<n>`, siehe 2.4).
+* Haltezeit und Empfindlichkeit speichert der Sensor selbst, die Instanz fragt sie beim Start ab.
+* Der Engineering-Modus (`LD2410EngineeringStart`, `LD2410EngineeringEnd`) und `LD2410Get` laufen über `TASV2_SendCommand` und `TASV2_SendCommandWait`.
+
 Die Treiber der Port-Erweiterungen und des PCA9685 sind laut Tasmota-Doku nicht in den vorkompilierten Firmwares enthalten.
 
 Variable | Ident | Typ | Beschreibung
 ------------ | ------------ | ------------ | ----------------
+Entfernung bewegtes Ziel, ruhendes Ziel, Erkennungsentfernung | `LD2410MovingDistance`, `LD2410StaticDistance`, `LD2410DetectDistance` | Kommazahl (cm) | Nur mit LD2410: Entfernungen aus der Telemetrie.
+Energie bewegtes und ruhendes Ziel | `LD2410MovingEnergy`, `LD2410StaticEnergy` | Ganzzahl | Nur mit LD2410: Stärke der Erkennung aus der Telemetrie.
+Anwesenheit (OUT-Pin) | `LD2410OutPin` | Ja/Nein | Nur mit LD2410: Zustand des OUT-Pins, aus der Antwort auf `LD2410Get`. Zuverlässiger Anwesenheitswert ist der OUT-Pin als Schalter am Gerät (siehe unten).
+Lichtsensor | `LD2410Light` | Ganzzahl | Nur mit LD2410 und eingebautem Lichtsensor, aus `LD2410Get`.
+Haltezeit ohne Person | `LD2410Duration` | Ganzzahl (s) | Nur mit LD2410, steuerbar (1 bis 65535). `LD2410Duration 0` (Werkseinstellung) sendet das Modul nie.
+Empfindlichkeit bewegtes Ziel, ruhendes Ziel | `LD2410MovingSens`, `LD2410StaticSens` | Text | Nur mit LD2410, steuerbar: bis zu neun Zahlen von 0 bis 100, durch Komma getrennt, je Entfernungsstufe (0,75 m), zum Beispiel `50,50,40,30,20,15,15,15,15`. Ungültige Eingaben werden nicht gesendet.
+Energie bewegt/ruhend, Stufe n | `LD2410MovingGate<n>`, `LD2410StaticGate<n>` | Ganzzahl | Nur mit LD2410 (Stufen 0 bis 8): Entstehen, wenn das Gerät den Befehl `LD2410Get` im Engineering-Modus beantwortet.
 MCP230XX Pin D<n> | `MCP230XX_D<n>` | Ja/Nein | Zustand des Pins (0 bis 15), aus der Telemetrie und aus Interrupt-Meldungen. Die Variable entsteht, sobald das Gerät den Pin meldet.
 MCP230XX Zeit seit dem letzten Interrupt | `MCP230XXIntervalMs` | Ganzzahl (ms) | Aus `MCP230XX_INT`.
 MCP230XX Ausgang D<n> | `MCP230XX_Out<n>` | Ja/Nein | Ausgangspin, steuerbar (`Sensor29 <n>,ON|OFF`). Der Zustand kommt aus der Antwort `S29cmnd_D<n>` und aus `MCP230_OUT`.

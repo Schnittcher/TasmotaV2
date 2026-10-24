@@ -32,6 +32,7 @@ Bindet Geräte mit Tasmota-Firmware über MQTT ein. Das Gerät beschreibt sich �
   * Lüfter Sonoff iFan02 und iFan03 mit Lüfterstufen
   * LED-Streifen WS2812 mit Pixelanzahl, Überblendung, Geschwindigkeit und Lichtprogrammen
   * IR-Empfänger mit Protokoll, Bits, Daten und Hash des zuletzt empfangenen Codes
+  * Anwesenheitsradar HLK-LD2410 mit Entfernungen, Energien, Haltezeit und Empfindlichkeit (nur mit einer Firmware, die den Treiber enthält)
   * Geräte mit Energiemessung, mit den Leistungsgrenzen (MaxPower)
   * Port-Erweiterungen MCP230xx und PCF8574 sowie PWM-Treiber PCA9685 (nur mit einer Firmware, die die Treiber enthält)
 * Erreichbarkeit des Geräts und WLAN-Qualität
