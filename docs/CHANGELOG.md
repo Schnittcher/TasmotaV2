@@ -7,6 +7,7 @@
 
 ### Fixes
 - Variablen aus Listen von Sensorwerten tragen jetzt eine Nummer in der Beschriftung (zum Beispiel "Distance 1" bis "Distance 3") und heißen nicht mehr alle gleich.
+- Der Dokumentationslink der Instanzen führt jetzt zur Dokumentation auf deinsmarthome.info.
 
 ## 16.10.2026 - Version 1.0 (Beta Version)
 
